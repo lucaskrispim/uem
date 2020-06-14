@@ -1,0 +1,26 @@
+`date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+
+CREATE TABLE localização (placa varchar(10) primary key not null, latitude DOUBLE, longitude DOUBLE, data TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+INSERT INTO localizacao(placa,latitude,longitude) VALUES ('HLL6463',-1.295443, -45.755561);
+INSERT INTO localizacao(placa,latitude,longitude) VALUES ('HLL6462',-1.295343, -45.755461);
+INSERT INTO localizacao(placa,latitude,longitude) VALUES ('HLL6463',-1.295243, -45.755361);
+INSERT INTO localizacao(placa,latitude,longitude) VALUES ('HLL6462',-1.295143, -45.755261);
+INSERT INTO localizacao(placa,latitude,longitude) VALUES ('HLL6463',-1.295043, -45.755161);
+INSERT INTO localizacao(placa,latitude,longitude) VALUES ('HLL6462',-1.294943, -45.755061);
+INSERT INTO localizacao(placa,latitude,longitude) VALUES ('HLL6463',-1.294843, -45.754961);
+INSERT INTO localizacao(placa,latitude,longitude) VALUES ('HLL6462',-1.294743, -45.754861);
+INSERT INTO localizacao(placa,latitude,longitude) VALUES ('HLL6463',-1.294643, -45.754761);
+INSERT INTO localizacao(placa,latitude,longitude) VALUES ('HLL6462',-1.294543, -45.754661);

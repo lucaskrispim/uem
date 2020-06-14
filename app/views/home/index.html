@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://rawgit.com/socketio/socket.io-client/master/dist/socket.io.js"></script>
+    <title>Document</title>
+</head>
+<body onload="loadMapScenario()">
+    <div class="container">
+        <div class="row">
+            <div id="idSelect" > Selecione a placa do caminhão: 
+                <select name="placa" id="plac" onchange="selecionaPlaca()">
+                    <option value="all" selected >Todos</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div id='myMap' style='width: 100vw; height: 90vh;'></div>
+        </div>    
+    </div>
+
+    <script type="text/javascript">
+        var socket = io('http://localhost:3001');
+        
+        socket.on('msgParaCliente',(data)=>{
+            for(let i=0; i<data.length; i++){
+                addc(data[i].latitude,data[i].longitude,data[i].placa);
+            }
+        });      
+        
+        function enviaMsg(){
+				socket.emit('msgParaServidor',{});
+
+			}        
+  
+        function loadMapScenario() {
+            enviaMsg();
+            vet = [];
+            vet2 = [];
+            raio = 2;
+            map = new Microsoft.Maps.Map(document.getElementById('myMap'), {
+            center: new Microsoft.Maps.Location(-1.295543, -45.755661),
+            mapTypeId: Microsoft.Maps.MapTypeId.aerial,
+            zoom: 15
+            });
+            retiraPonto();
+        }
+
+        function selecionaPlaca(){
+            retiraPonto();
+            var x = document.getElementById("plac").value;
+
+            for(let i=0; i<vet2.length; i++){
+                if(vet2[i].placa == x){
+                    let loc = new Microsoft.Maps.Location(vet2[i].latitude, vet2[i].longitude);
+                    let pl = vet.findIndex( obj => obj.placa == x );
+                    let pin1 = createCirclePushpin(loc, raio,'rgb('+vet[pl].n1+','+vet[pl].n2+','+vet[pl].n3+')');
+                    map.entities.push(pin1);
+                }else if(x == 'all'){
+                    let loc = new Microsoft.Maps.Location(vet2[i].latitude, vet2[i].longitude);
+                    let pl = vet.findIndex( obj => obj.placa == vet2[i].placa );
+                    let pin1 = createCirclePushpin(loc, raio,'rgb('+vet[pl].n1+','+vet[pl].n2+','+vet[pl].n3+')');
+                    map.entities.push(pin1);
+                }
+            }
+        }
+
+        function retiraPonto(){
+            for (var i = map.entities.getLength() - 1; i >= 0; i--) {
+                var pushpin = map.entities.get(i);
+                if (pushpin instanceof Microsoft.Maps.Pushpin) {
+                    map.entities.removeAt(i);
+                }
+            }
+        }
+        
+        function selectPlaca(placa){
+            var x = document.getElementById("plac");
+            var option = document.createElement("option");
+            option.text = placa;
+            x.add(option); 
+        }
+            
+        function addc(x,y,placa){
+                let loc = new Microsoft.Maps.Location(x, y);
+                vet2.push({placa:placa,latitude:x,longitude:y});
+                if( vet.findIndex( obj => obj.placa == placa ) == -1 ){
+                    var n1 = (Math.floor(Math.random() * 256)).toString();
+                    var n2 = (Math.floor(Math.random() * 256)).toString();
+                    var n3 = (Math.floor(Math.random() * 256)).toString();
+                    vet.push({placa:placa,n1:n1,n2:n2,n3:n3});
+                    var pin1 = createCirclePushpin(loc, raio,'rgb('+n1+','+n2+','+n3+')');
+                    selectPlaca(placa);
+                }else{
+                    let pl = vet.findIndex( obj => obj.placa == placa );
+                    
+                    var pin1 = createCirclePushpin(loc, raio,'rgb('+vet[pl].n1+','+vet[pl].n2+','+vet[pl].n3+')');
+                }
+                if(document.getElementById("plac").value=="all" || document.getElementById("plac").value==placa){
+                    map.entities.push(pin1);
+                };
+                    
+        }    
+
+        function createCirclePushpin(location, radius, fillColor, strokeColor, strokeWidth) {
+            strokeWidth = strokeWidth || 0;
+
+            //Create an SVG string of a circle with the specified radius and color.
+            var svg = ['<svg xmlns="http://www.w3.org/2000/svg" width="', (radius * 2),
+            '" height="', (radius * 2), '"><circle cx="', radius, '" cy="', radius, '" r="',
+            (radius - strokeWidth), '" stroke="', strokeColor, '" stroke-width="', strokeWidth, '" fill="', fillColor, '"/></svg>'];
+
+            //Create a pushpin from the SVG and anchor it to the center of the circle.
+            return new Microsoft.Maps.Pushpin(location, {
+            icon: svg.join(''),
+            anchor: new Microsoft.Maps.Point(radius, radius)
+            });            
+        }
+        
+    </script>
+
+ <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=AhaPUqWVNwVKmsRfCQ1XbJzxbMLcJ42Tzg3Qasjb_vtvBRQUEjbERa-u6R6giITz' async defer></script>
+ <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>   
+</body>
+</html>
