@@ -2,14 +2,14 @@ let app = require('./config/server');
 
 
 /* parametrizar a porta de escuta */
-let port = process.env.PORT || 3000;
+var port = process.env.port || 3000;
 let server = app.listen(port,()=>{
     console.log("Servidor On");
 });
    
 let io = require('socket.io').listen(server);
 
-/*
+
 app.set('io',io);
    
 io.on('connection',(socket)=>{
@@ -28,6 +28,6 @@ io.on('connection',(socket)=>{
         
     });   
 });
-*/
+
 
 
