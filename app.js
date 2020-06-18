@@ -2,7 +2,7 @@ let app = require('./config/server');
 
 
 /* parametrizar a porta de escuta */
-var port_number = server.listen(process.env.PORT || 3000);
+var port_number = process.env.PORT || 3000;
 let server = app.listen(port_number,()=>{
     console.log("Servidor On");
 });
