@@ -23,7 +23,7 @@
     </div>
 
     <script type="text/javascript">
-        /*
+        
         var socket = io('http://localhost:3001');
         
         socket.on('msgParaCliente',(data)=>{
@@ -31,7 +31,7 @@
                 addc(data[i].latitude,data[i].longitude,data[i].placa);
             }
         });      
-        */
+        
         function enviaMsg(){
 				socket.emit('msgParaServidor',{});
 
