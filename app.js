@@ -11,7 +11,7 @@ let io = require('socket.io').listen(server);
 
 
 app.set('io',io);
-   
+ /*  
 io.on('connection',(socket)=>{
     console.log('usuário conectou!');
 
@@ -28,6 +28,6 @@ io.on('connection',(socket)=>{
         
     });   
 });
-
+*/
 
 
