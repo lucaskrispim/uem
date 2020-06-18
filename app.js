@@ -9,7 +9,7 @@ let server = app.listen(port,()=>{
    
 let io = require('socket.io').listen(server);
 
-
+/*
 app.set('io',io);
    
 io.on('connection',(socket)=>{
@@ -28,6 +28,6 @@ io.on('connection',(socket)=>{
         
     });   
 });
-
+*/
 
 
