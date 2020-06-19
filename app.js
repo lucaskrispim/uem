@@ -1,13 +1,5 @@
 let app = require('./config/server');
 
-/*
-var port_number = process.env.PORT || 3001;
-let server = app.listen(port_number,()=>{
-    console.log("Servidor On");
-});
-   
-let io = require('socket.io').listen(server);
-*/
 let server = require('http').createServer(app)
 io = require('socket.io').listen(server)
 

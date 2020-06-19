@@ -16,11 +16,10 @@ app.use(bodyParser.urlencoded({extended:true}));
 
 //io.socketConnect(server);
 
-consign().include('./app/routes')
-            .then('./config/dbConnection.js')  
-            //.then('./config/ioConnection.js')  
+consign().include('./config/dbConnection.js')    
             .then('./app/models')   
             .then('./app/controllers') 
+            .then('./app/routes')
             .into(app);
         
 module.exports = app;
