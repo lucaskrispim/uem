@@ -23,12 +23,11 @@ io.on('connection',(socket)=>{
     });
 
     socket.on('msgParaServidor',(data)=>{
-        //let connection = app.config.dbConnection();
-        //let mapaModel = new app.app.models.MapaDAO(connection);
-        //mapaModel.getPoints((error,result)=>{
-        result=[{'placa':'hll6462','latitude':-1.295243,'longitude':-45.754561}] 
-        socket.emit('msgParaCliente',result);
-        //});        
+        let connection = app.config.dbConnection();
+        let mapaModel = new app.app.models.MapaDAO(connection);
+        mapaModel.getPoints((error,result)=>{
+            socket.emit('msgParaCliente',result);
+        });        
         
     });   
 });
