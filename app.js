@@ -3,7 +3,7 @@ let app = require('./config/server');
 let server = require('http').createServer(app)
 io = require('socket.io').listen(server)
 
-server.listen(process.env.PORT || 3000);
+server.listen(process.env.PORT || 3001);
 
 app.set('io',io);
   
