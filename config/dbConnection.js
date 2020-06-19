@@ -10,7 +10,7 @@ let connMysql = ()=>{
 };        
 */
 let connMysql = ()=>{
-    return mysql.createConnection({
+    return mysql.createPool({
         user:"bbd520cce4c7b9",
         password:"4c214972",
         host:"us-cdbr-east-05.cleardb.net",
