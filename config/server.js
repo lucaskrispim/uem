@@ -25,4 +25,5 @@ load('./config/dbConnection.js') // novo módulo que configura os caminhos da ap
                 .then('./app/routes')
                 .into(app);
 
+                
 module.exports = app; // exporta esse módulo
