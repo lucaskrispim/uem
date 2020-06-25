@@ -1,4 +1,4 @@
-class MapaDAO{
+class MapaDAO{ // model de conexão, inserção e busca no banco de dados
     constructor(connection) {
         this.connection = connection;
     }

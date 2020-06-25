@@ -9,7 +9,7 @@ let connMysql = ()=>{
     });
 };        
 */
-let connMysql = ()=>{
+let connMysql = ()=>{   // O banco está guardado no heroku. Não precisa instalar o mysql
     return mysql.createPool({
         user:"bbd520cce4c7b9",
         password:"4c214972",
@@ -18,6 +18,6 @@ let connMysql = ()=>{
     });
 };  
 
-module.exports = ()=>{
+module.exports = ()=>{  // Exportando a variável que contém a configuração com o banco de dados
     return connMysql;
 };
