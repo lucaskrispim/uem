@@ -3,7 +3,9 @@ let app = require('./config/server'); // Requisição feita para o arquivo de co
 let server = require('http').createServer(app) // Criar um servidor http para fazer a comunicação com socket
 io = require('socket.io').listen(server) // instancia o módulo do socket escutando na mesma porta do servidor
 
-server.listen(process.env.PORT || 3002); // Aqui é feita a escolha de porta de escuta
+server.listen(process.env.PORT || 3002,()=>{
+    console.log('Servidor On!')
+}); // Aqui é feita a escolha de porta de escuta
 
 app.set('io',io); // aqui estamos empacotando a variável io para ser usada dentro do app
   
@@ -37,9 +39,17 @@ port.pipe(parser_port);
 port.write('Porta COM Funcionando\n')
 
 parser_port.on('data', (line) => {
-  console.log(line);
-  console.log(typeof line)
-  var obj = JSON.parse(line); 
-  console.log(obj.placa)
-})
+    console.log(line);
+    console.log(typeof line)
+    var obj = JSON.parse(line); 
+    console.log(obj.placa)
+    let connection = app.config.dbConnection(); // conexão com banco de dados
+    let mapaModel = new app.app.models.MapaDAO(connection); // instanciando a classe com métodos referentes ao banco de dados  
+    mapaModel.salvarLocalizacao(obj,(error,result)=>{
+        if (!error) {
+            app.get('io').emit('msgParaCliente',[obj]);    
+            console.log('deu certo!');
+        }
+    }); 
+});
 
