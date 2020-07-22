@@ -23,6 +23,7 @@ load('./config/dbConnection.js') // novo módulo que configura os caminhos da ap
                 .then('./app/models')   
                 .then('./app/controllers') 
                 .then('./app/routes')
+                .then('./app/utils')
                 .into(app);
 
                 
