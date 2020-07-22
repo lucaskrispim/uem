@@ -22,7 +22,6 @@ io.on('connection',(socket)=>{ // comunicação com socket
         mapaModel.getPoints((error,result)=>{ // Aqui usamos o método da classe para trazer todos os registros no banco de dados
             socket.emit('msgParaCliente',result);   // emitimos esse dados para o cliente
         });        
-        
     });   
 });
 
@@ -56,19 +55,22 @@ parser_port.on('data', (line) => {
     if(!val.isValid()){
         console.log(val.errors);
     }else{
-        console.log(obj);
-        console.log(typeof obj);
-        console.log(obj.placa)
+        app.get('io').emit('msgParaCliente',[obj]);
+        /*
+        //console.log(obj);
+        //console.log(typeof obj);
+        //console.log(obj.placa)
         
         let connection = app.config.dbConnection(); // conexão com banco de dados
         let mapaModel = new app.app.models.MapaDAO(connection); // instanciando a classe com métodos referentes ao banco de dados  
         mapaModel.salvarLocalizacao(obj,(error,result)=>{
             if (!error) {
+                console.log(result);
                 app.get('io').emit('msgParaCliente',[obj]);    
                 console.log('deu certo!');
             }
         });
-         
+         */
     }
 });
 
