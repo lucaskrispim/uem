@@ -30,12 +30,12 @@ io.on('connection',(socket)=>{ // comunicação com socket
 const SerialPort = require('serialport');
 const Readline = require('@serialport/parser-readline');
 
-const port = new SerialPort('/dev/pts/4', { baudRate: 9600 });
+const port = new SerialPort('/dev/pts/3', { baudRate: 9600 });
 
 // Analisador sintático - Leitura de dados 
 const parser_port = new Readline();
 port.pipe(parser_port);
-port.write('Porta COM Funcionando\n')
+port.write('Porta COM Funcionando\n');
 
 parser_port.on('data', (line) => {
     var temp = line.trim().split(',')
@@ -56,7 +56,7 @@ parser_port.on('data', (line) => {
         console.log(val.errors);
     }else{
         app.get('io').emit('msgParaCliente',[obj]);
-        /*
+        
         //console.log(obj);
         //console.log(typeof obj);
         //console.log(obj.placa)
@@ -70,7 +70,6 @@ parser_port.on('data', (line) => {
                 console.log('deu certo!');
             }
         });
-         */
     }
 });
 
