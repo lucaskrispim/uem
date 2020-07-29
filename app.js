@@ -36,6 +36,7 @@ const port = new SerialPort('/dev/pts/3', { baudRate: 9600 });
 const parser_port = new Readline();
 port.pipe(parser_port);
 port.write('Porta COM Funcionando\n');
+let connection = app.config.dbConnection(); // conexão com banco de dados
 
 parser_port.on('data', (line) => {
     var temp = line.trim().split(',')
@@ -61,13 +62,14 @@ parser_port.on('data', (line) => {
         //console.log(typeof obj);
         //console.log(obj.placa)
         
-        let connection = app.config.dbConnection(); // conexão com banco de dados
         let mapaModel = new app.app.models.MapaDAO(connection); // instanciando a classe com métodos referentes ao banco de dados  
         mapaModel.salvarLocalizacao(obj,(error,result)=>{
             if (!error) {
                 console.log(result);
                 app.get('io').emit('msgParaCliente',[obj]);    
                 console.log('deu certo!');
+            }else{
+                console.log(error);
             }
         });
     }
