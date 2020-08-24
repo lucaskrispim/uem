@@ -7,6 +7,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://rawgit.com/socketio/socket.io-client/master/dist/socket.io.js"></script>
     <title>Document</title>
+    <link rel="shortcut icon" href="#" />
+    <script type="text/javascript" src="js/teste.js"></script>
 </head>
 <body onload="loadMapScenario()">
     <div class="container">
@@ -40,7 +42,7 @@
                 <select name="minuto" id="minuto" onchange="selecionaMinuto()">
                     <option value="all" selected >Todos</option>
                 </select>
-            </div>               
+            </div>              
         </div>
         <div class="row">
             <div id='myMap' style='width: 100vw; height: 90vh;'></div>
@@ -105,6 +107,9 @@
                     let pl = vet.findIndex( obj => obj.placa == x );
                     let pin1 = createCirclePushpin(loc, raio,'rgb('+vet[pl].n1+','+vet[pl].n2+','+vet[pl].n3+')');
                     map.entities.push(pin1);
+
+
+
                 }else if(x == 'all'){
                     let loc = new Microsoft.Maps.Location(vet2[i].latitude, vet2[i].longitude);
                     let pl = vet.findIndex( obj => obj.placa == vet2[i].placa );
@@ -133,7 +138,6 @@
         function addc(x,y,placa, A, M, D, H, Mi){
                 let loc = new Microsoft.Maps.Location(x, y);
                 vet2.push({placa:placa,latitude:x,longitude:y,ano:A,mes:M,dia:D,hora:H,minuto:Mi});
-                horasUnicas(A, M, D, H, Mi);
                 if( vet.findIndex( obj => obj.placa == placa ) == -1 ){
                     let n1 = (Math.floor(Math.random() * 256)).toString();
                     let n2 = (Math.floor(Math.random() * 256)).toString();
@@ -151,73 +155,7 @@
                     
         }    
 
-        function horasUnicas(A, M, D, H, Mi){
-            if( vetAno.findIndex( obj => obj.ano == A ) == -1 ){
-                vetAno.push({ano:A});
-                let x = document.getElementById("ano");
-                while(x.length>0){
-                    x.remove(x.length-1);  
-                }
-                vetAno.sort();
-                for(i=0;i<vetAno.length;i++){
-                    let option = document.createElement("option");
-                    option.text = vetAno[i].ano;
-                    x.add(option);
-                }
-            }
-            if( vetMes.findIndex( obj => obj.mes == M ) == -1 ){
-                vetMes.push({mes:M});
-                let x = document.getElementById("mes");
-                while(x.length>0){
-                    x.remove(x.length-1);  
-                }
-                vetMes.sort();
-                for(i=0;i<vetMes.length;i++){
-                    let option = document.createElement("option");
-                    option.text = vetMes[i].mes;
-                    x.add(option);
-                }
-            }
-            if( vetDia.findIndex( obj => obj.dia == D ) == -1 ){
-                vetDia.push({dia:D});
-                let x = document.getElementById("dia");
-                while(x.length>0){
-                    x.remove(x.length-1);  
-                }
-                vetDia.sort();
-                for(i=0;i<vetDia.length;i++){
-                    let option = document.createElement("option");
-                    option.text = vetDia[i].dia;
-                    x.add(option);
-                }
-            }
-            if( vetHora.findIndex( obj => obj.hora == H ) == -1 ){
-                vetHora.push({hora:H});
-                let x = document.getElementById("hora");
-                while(x.length>0){
-                    x.remove(x.length-1);  
-                }
-                vetHora.sort();
-                for(i=0;i<vetHora.length;i++){
-                    let option = document.createElement("option");
-                    option.text = vetHora[i].hora;
-                    x.add(option);
-                }
-            } 
-            if( vetMinuto.findIndex( obj => obj.minuto == Mi ) == -1 ){
-                vetMinuto.push({minuto:Mi});
-                let x = document.getElementById("minuto");
-                while(x.length>0){
-                    x.remove(x.length-1);  
-                }
-                vetMinuto.sort();
-                for(i=0;i<vetMinuto.length;i++){
-                    let option = document.createElement("option");
-                    option.text = vetMinuto[i].minuto;
-                    x.add(option);
-                }
-            }
-        }
+        
 
         function createCirclePushpin(location, radius, fillColor, strokeColor, strokeWidth) {
             strokeWidth = strokeWidth || 0;
