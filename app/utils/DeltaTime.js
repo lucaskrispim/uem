@@ -28,7 +28,10 @@ class DeltaTime {
     }
     static statistic(p){
         p.forEach((item)=>{
-            item.porcentagem =( (item.dt.filter(x => x>3).length)/(item.dt.length) ).toFixed(2);
+            if(item.hasOwnProperty('dt')){
+                item.totalDelay = (item.dt.filter(x => x>3).length)
+                item.total = (item.dt.length) 
+            }
         });
     }
 }

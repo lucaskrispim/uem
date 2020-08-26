@@ -1,61 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://rawgit.com/socketio/socket.io-client/master/dist/socket.io.js"></script>
     <title>Document</title>
     <link rel="shortcut icon" href="#" />
     <script type="text/javascript" src="js/teste.js"></script>
 </head>
+
 <body onload="loadMapScenario()">
     <div class="container">
-        <div class="row mt-2 mb-2 mr-1 ml-1">
-            <div class="mr-1" id="idSelect" > Placa do caminhão: 
+        <div class="row mt-2 mb-2">
+            <div class="mr-1" id="idSelect"> Placa do caminhão:
                 <select name="placa" id="plac" onchange="selecionaPlaca()">
-                    <option value="all" selected >Todos</option>
+                    <option value="all" selected>Todos</option>
                 </select>
             </div>
-            <div class="mr-1" id="idSelectAno" > Ano: 
+            <div class="mr-1" id="idSelectAno"> Ano:
                 <select name="ano" id="ano" onchange="selecionaAno()">
-                    <option value="all" selected >Todos</option>
-                </select>
-            </div>   
-            <div class="mr-1" id="idSelectMes" > Mês: 
-                <select name="mes" id="mes" onchange="selecionaMes()">
-                    <option value="all" selected >Todos</option>
+                    <option value="all" selected>Todos</option>
                 </select>
             </div>
-            <div class="mr-1" id="idSelectDia" > Dia: 
+            <div class="mr-1" id="idSelectMes"> Mês:
+                <select name="mes" id="mes" onchange="selecionaMes()">
+                    <option value="all" selected>Todos</option>
+                </select>
+            </div>
+            <div class="mr-1" id="idSelectDia"> Dia:
                 <select name="dia" id="dia" onchange="selecionaDia()">
-                    <option value="all" selected >Todos</option>
+                    <option value="all" selected>Todos</option>
                 </select>
-            </div>   
-            <div class="mr-1" id="idSelectHora" > Hora: 
+            </div>
+            <div class="mr-1" id="idSelectHora"> Hora:
                 <select name="hora" id="hora" onchange="selecionaHora()">
-                    <option value="all" selected >Todos</option>
+                    <option value="all" selected>Todos</option>
                 </select>
-            </div>     
-            <div class="mr-1" id="idSelectMinuto" > Minuto: 
+            </div>
+            <div class="mr-1" id="idSelectMinuto"> Minuto:
                 <select name="minuto" id="minuto" onchange="selecionaMinuto()">
-                    <option value="all" selected >Todos</option>
+                    <option value="all" selected>Todos</option>
                 </select>
-            </div>              
+            </div>
         </div>
         <div class="row">
-            <div id='myMap' style='width: 100vw; height: 90vh;'></div>
-        </div>    
+            <div class="col-xs-12  col-sm-12 col-md-8 col-lg-8 ml-0 mr-0">
+                <div id='myMap' style="height: 80vh;"></div>
+            </div>
+            <div class="col-xs-12  col-sm-12 col-md-4 col-lg-4">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Placa</th>
+                            <th>Delay</th>
+                            <th>S/delay</th>
+                            <th>Total</th>
+                            <th>%</th>
+                        </tr>
+                    </thead>
+                    <tbody id="myBodyTable">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <script type="text/javascript">
-        
+
         var socket = io();
-        
-        socket.on('msgParaCliente',(data)=>{
-            for(let i=0; i<data.length; i++){
-                if(data[i].hasOwnProperty('data')){
+
+        socket.on('msgParaCliente', (data) => {
+            for (let i = 0; i < data.length; i++) {
+                if (data[i].hasOwnProperty('data')) {
                     let numbers = data[i].data.match(/[+]?\d+(?:\.\d+)?/g).map(Number);
                     data[i].ano = parseInt(numbers[0]);
                     data[i].mes = parseInt(numbers[1]);
@@ -63,23 +84,45 @@
                     data[i].hora = parseInt(numbers[3]);
                     data[i].minuto = parseInt(numbers[4]);
                     data[i].segundo = parseInt(numbers[5]);
-                }else{
+                } else {
                     let numbers = new Date();
                     data[i].ano = numbers.getFullYear();
-                    data[i].mes = numbers.getMonth()+1;
+                    data[i].mes = numbers.getMonth() + 1;
                     data[i].dia = numbers.getDate();
                     data[i].hora = numbers.getHours();
                     data[i].minuto = numbers.getMinutes();
-                    data[i].segundo = numbers.getSeconds();    
+                    data[i].segundo = numbers.getSeconds();
                 }
-                addc(data[i].latitude,data[i].longitude,data[i].placa,data[i].ano,data[i].mes,data[i].dia,data[i].hora,data[i].minuto);
+                addc(data[i].latitude, data[i].longitude, data[i].placa, data[i].ano, data[i].mes, data[i].dia, data[i].hora, data[i].minuto);
             }
-        });      
-        
-        function enviaMsg(){
-			socket.emit('msgParaServidor',{});
-        }        
-        
+        });
+
+        socket.on('msgParaCliente2', (data) => {
+            zeraLi();
+            data.forEach(element => {
+                if (element.hasOwnProperty('dt')) {
+                    let table = document.getElementById("myBodyTable");
+                    let row = table.insertRow(0);
+
+                    let cell1 = row.insertCell(0);
+                    let cell2 = row.insertCell(1);
+                    let cell3 = row.insertCell(2);
+                    let cell4 = row.insertCell(3);
+                    let cell5 = row.insertCell(4);
+
+                    cell1.innerHTML = element.placa;
+                    cell2.innerHTML = element.totalDelay;
+                    cell3.innerHTML = element.total - element.totalDelay
+                    cell4.innerHTML = element.total
+                    cell5.innerHTML = (((element.totalDelay) / (element.total)) * 100).toFixed(2);
+                }
+            });
+        });
+
+        function enviaMsg() {
+            socket.emit('msgParaServidor', {});
+        }
+
         function loadMapScenario() {
             enviaMsg();
             vet = [];
@@ -91,35 +134,41 @@
             vetMinuto = [];
             raio = 2;
             map = new Microsoft.Maps.Map(document.getElementById('myMap'), {
-            center: new Microsoft.Maps.Location(-1.295543, -45.755661),
-            mapTypeId: Microsoft.Maps.MapTypeId.aerial,
-            zoom: 15
+                center: new Microsoft.Maps.Location(-1.295543, -45.755661),
+                mapTypeId: Microsoft.Maps.MapTypeId.aerial,
+                zoom: 15
             });
             retiraPonto();
         }
 
-        function selecionaPlaca(){
+        function zeraLi() {
+            while (document.getElementById("myBodyTable").rows.length > 0) {
+                document.getElementById("myBodyTable").deleteRow(0);
+            }
+        }
+
+        function selecionaPlaca() {
             retiraPonto();
             var x = document.getElementById("plac").value;
-            for(let i=0; i<vet2.length; i++){
-                if(vet2[i].placa == x){
+            for (let i = 0; i < vet2.length; i++) {
+                if (vet2[i].placa == x) {
                     let loc = new Microsoft.Maps.Location(vet2[i].latitude, vet2[i].longitude);
-                    let pl = vet.findIndex( obj => obj.placa == x );
-                    let pin1 = createCirclePushpin(loc, raio,'rgb('+vet[pl].n1+','+vet[pl].n2+','+vet[pl].n3+')');
+                    let pl = vet.findIndex(obj => obj.placa == x);
+                    let pin1 = createCirclePushpin(loc, raio, 'rgb(' + vet[pl].n1 + ',' + vet[pl].n2 + ',' + vet[pl].n3 + ')');
                     map.entities.push(pin1);
 
 
 
-                }else if(x == 'all'){
+                } else if (x == 'all') {
                     let loc = new Microsoft.Maps.Location(vet2[i].latitude, vet2[i].longitude);
-                    let pl = vet.findIndex( obj => obj.placa == vet2[i].placa );
-                    let pin1 = createCirclePushpin(loc, raio,'rgb('+vet[pl].n1+','+vet[pl].n2+','+vet[pl].n3+')');
+                    let pl = vet.findIndex(obj => obj.placa == vet2[i].placa);
+                    let pin1 = createCirclePushpin(loc, raio, 'rgb(' + vet[pl].n1 + ',' + vet[pl].n2 + ',' + vet[pl].n3 + ')');
                     map.entities.push(pin1);
                 }
             }
         }
 
-        function retiraPonto(){
+        function retiraPonto() {
             for (var i = map.entities.getLength() - 1; i >= 0; i--) {
                 var pushpin = map.entities.get(i);
                 if (pushpin instanceof Microsoft.Maps.Pushpin) {
@@ -127,56 +176,63 @@
                 }
             }
         }
-        
-        function selectPlaca(placa){
+
+        function selectPlaca(placa) {
             var x = document.getElementById("plac");
             var option = document.createElement("option");
             option.text = placa;
-            x.add(option); 
+            x.add(option);
         }
-            
-        function addc(x,y,placa, A, M, D, H, Mi){
-                let loc = new Microsoft.Maps.Location(x, y);
-                vet2.push({placa:placa,latitude:x,longitude:y,ano:A,mes:M,dia:D,hora:H,minuto:Mi});
-                if( vet.findIndex( obj => obj.placa == placa ) == -1 ){
-                    let n1 = (Math.floor(Math.random() * 256)).toString();
-                    let n2 = (Math.floor(Math.random() * 256)).toString();
-                    let n3 = (Math.floor(Math.random() * 256)).toString();
-                    vet.push({placa:placa,n1:n1,n2:n2,n3:n3});
-                    var pin1 = createCirclePushpin(loc, raio,'rgb('+n1+','+n2+','+n3+')');
-                    selectPlaca(placa);
-                }else{
-                    let pl = vet.findIndex( obj => obj.placa == placa );
-                    var pin1 = createCirclePushpin(loc, raio,'rgb('+vet[pl].n1+','+vet[pl].n2+','+vet[pl].n3+')');
-                }
-                if(document.getElementById("plac").value=="all" || document.getElementById("plac").value==placa){
-                    map.entities.push(pin1);
-                };
-                    
-        }    
 
-        
+        function addc(x, y, placa, A, M, D, H, Mi) {
+            let loc = new Microsoft.Maps.Location(x, y);
+            vet2.push({ placa: placa, latitude: x, longitude: y, ano: A, mes: M, dia: D, hora: H, minuto: Mi });
+            if (vet.findIndex(obj => obj.placa == placa) == -1) {
+                let n1 = (Math.floor(Math.random() * 256)).toString();
+                let n2 = (Math.floor(Math.random() * 256)).toString();
+                let n3 = (Math.floor(Math.random() * 256)).toString();
+                vet.push({ placa: placa, n1: n1, n2: n2, n3: n3 });
+                var pin1 = createCirclePushpin(loc, raio, 'rgb(' + n1 + ',' + n2 + ',' + n3 + ')');
+                selectPlaca(placa);
+            } else {
+                let pl = vet.findIndex(obj => obj.placa == placa);
+                var pin1 = createCirclePushpin(loc, raio, 'rgb(' + vet[pl].n1 + ',' + vet[pl].n2 + ',' + vet[pl].n3 + ')');
+            }
+            if (document.getElementById("plac").value == "all" || document.getElementById("plac").value == placa) {
+                map.entities.push(pin1);
+            };
+
+        }
 
         function createCirclePushpin(location, radius, fillColor, strokeColor, strokeWidth) {
             strokeWidth = strokeWidth || 0;
 
             //Create an SVG string of a circle with the specified radius and color.
             var svg = ['<svg xmlns="http://www.w3.org/2000/svg" width="', (radius * 2),
-            '" height="', (radius * 2), '"><circle cx="', radius, '" cy="', radius, '" r="',
-            (radius - strokeWidth), '" stroke="', strokeColor, '" stroke-width="', strokeWidth, '" fill="', fillColor, '"/></svg>'];
+                '" height="', (radius * 2), '"><circle cx="', radius, '" cy="', radius, '" r="',
+                (radius - strokeWidth), '" stroke="', strokeColor, '" stroke-width="', strokeWidth, '" fill="', fillColor, '"/></svg>'];
 
             //Create a pushpin from the SVG and anchor it to the center of the circle.
             return new Microsoft.Maps.Pushpin(location, {
-            icon: svg.join(''),
-            anchor: new Microsoft.Maps.Point(radius, radius)
-            });            
+                icon: svg.join(''),
+                anchor: new Microsoft.Maps.Point(radius, radius)
+            });
         }
-        
+
     </script>
 
- <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=AhaPUqWVNwVKmsRfCQ1XbJzxbMLcJ42Tzg3Qasjb_vtvBRQUEjbERa-u6R6giITz' async defer></script>
- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>   
+    <script type='text/javascript'
+        src='https://www.bing.com/api/maps/mapcontrol?key=AhaPUqWVNwVKmsRfCQ1XbJzxbMLcJ42Tzg3Qasjb_vtvBRQUEjbERa-u6R6giITz'
+        async defer></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 </body>
+
 </html>
